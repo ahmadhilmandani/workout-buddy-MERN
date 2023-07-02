@@ -8,19 +8,18 @@ const getAllWorkout = async (req, res) => {
   res.status(200).json(workouts)
 }
 
+
+// get single data (workout)
 const getWorkout = async (req, res) => {
   const { id } = req.params
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({ error: "Not Found!" })
   }
-
   const workout = await workoutModel.findById(id)
-
   if (!workout) {
     return res.status(404).json({ error: "Not Found!" })
   }
-
   res.status(200).json(workout)
 }
 
@@ -39,4 +38,35 @@ const createWorkout = async (req, res) => {
   }
 }
 
-module.exports = { createWorkout, getAllWorkout, getWorkout }
+
+// delete data
+const deleteWorkout = async (req, res) => {
+  const { id } = req.params
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ err: "Not Found!" })
+  }
+  const deleted = await workoutModel.findByIdAndDelete({ _id: id })
+  if (!deleted) {
+    return res.status(404).json({ err: "Not Found!" })
+  }
+  res.status(200).json({ msg: "data deleted" })
+}
+
+
+// updated data
+const updateWorkout = async (req, res) => {
+  const { id } = req.params
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ err: "Not Found!" })
+  }
+  const updated = await workoutModel.findByIdAndUpdate({ _id: id }, {
+    ...req.body
+  })
+  if (!updated) {
+    return res.status(404).json({ err: "Not Found!" })
+  }
+  res.status(200).json({ msg: `${id} is sucessfully updated` })
+}
+
+
+module.exports = { createWorkout, getAllWorkout, getWorkout, deleteWorkout, updateWorkout }

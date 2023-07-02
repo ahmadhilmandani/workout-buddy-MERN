@@ -10,11 +10,11 @@ const app = express();
 const PORT = process.env.PORT || 5000
 
 // middleware
-app.use(express.json())
 app.use((req, res, next) => {
   console.log(req.path, req.method)
   next()
 })
+app.use(express.json())
 
 // routes
 app.use('/api/workout', workoutRoutes)
